@@ -8,7 +8,7 @@
 
 ## 例子
 
-[demo](./index.html)
+[demo](xunqilong.com/angualr-slider-input/index.html)
 
 ## 使用
 
