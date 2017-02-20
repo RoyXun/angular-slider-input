@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+
+<head>
+    <title>test</title>
+    <link href="http://cdn.bootcss.com/bootstrap/3.1.1/css/bootstrap.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/angularjs-slider/6.0.1/rzslider.min.css">
+    <script src="http://cdn.bootcss.com/angular.js/1.2.28/angular.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angularjs-slider/6.0.1/rzslider.min.js"></script>
+    <script src="./index.js"></script>
+    <style>
+        .custom-slider-wrapper .rzslider {
+            width: 390px;
+            margin: 15px 0 40px;
+        }
+        
+        .custom-slider-wrapper .rzslider .rz-bar {
+            background: #f2f2f2;
+        }
+        
+        .custom-slider-wrapper .rzslider .rz-selection {
+            background: #0091ff;
+        }
+        
+        .custom-slider-wrapper .rzslider .rz-pointer {
+            width: 20px;
+            height: 22px;
+            top: -9px;
+            background: #f9f9f9;
+            border: 1px solid #999;
+            border-radius: 3px;
+        }
+        
+        .custom-slider-wrapper .rzslider .rz-pointer:focus {
+            outline: 0;
+        }
+        
+        .custom-slider-wrapper .rzslider .rz-pointer:after {
+            display: none;
+        }
+        
+        .custom-slider-wrapper .rzslider .rz-bubble {
+            top: 15px;
+            bottom: auto;
+            color: #333;
+        }
+        
+        .custom-slider-wrapper .rzslider .rz-limit {
+            color: #333;
+        }
+        
+        .custom-slider-wrapper .custom-slider-control {
+            display: inline-block;
+            margin-left: 20px;
+            vertical-align: top;
+        }
+        
+        .custom-slider-wrapper .custom-slider-control .form-control {
+            display: inline-block;
+            width: 50px;
+            padding: 6px 4px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body ng-controller="myCtrl">
+    <div class="container">
+        <h3>angularjs-slider <strong>without</strong> custom slider input:</h3>
+        <div class="custom-slider-wrapper">
+            <rzslider class="custom-slider" rz-slider-model="demo.value" rz-slider-options="demo.options"></rzslider>
+            <div class="custom-slider-control">
+                <input type="text" class="form-control" ng-model="demo.value">
+            </div>
+        </div>
+        <hr>
+        <h3>custom slider input with max and min limit:</h3>
+        <div class="custom-slider-wrapper">
+            <label>foo:</label>
+            <rzslider class="custom-slider" rz-slider-model="foo.value" rz-slider-options="foo.options"></rzslider>
+            <div class="custom-slider-control">
+                <input type="text" class="form-control" ng-model="fooInput" rx-slider-input="foo.value" slider-id="foo_id" min="foo.options.floor"
+                    max="foo.options.ceil">
+            </div>
+            <p>foo input model: {{fooInput}}</p>
+        </div>
+        <div class="custom-slider-wrapper">
+            <label>bar:</label>
+            <rzslider class="custom-slider" rz-slider-model="bar.value" rz-slider-options="bar.options"></rzslider>
+            <div class="custom-slider-control">
+                <input type="text" class="form-control" ng-model="barInput" rx-slider-input="bar.value" slider-id="bar_id" min="bar.options.floor"
+                    max="bar.options.ceil">
+            </div>
+            <p>bar input model: {{barInput}}</p>
+        </div>
+        <p>Do not use the model bound to slider input to do anything but changing the slider value.</p>
+        <p>Not support decimal or negative number for now.</p>
+    </div>
+    <script>
+        angular.module('myApp', ['rzModule', 'rx.sliderInput'])
+            .controller('myCtrl', ['$scope', 'EventBus', function ($scope, EventBus) {
+                $scope.demo = {
+                    value: 50,
+                    options: {
+                        floor: 0,
+                        ceil: 100,
+                        step: 1,
+                        showSelectionBar: true
+                    }
+                };
+                $scope.foo = {
+                    value: 50,
+                    options: {
+                        floor: 0,
+                        ceil: 100,
+                        step: 1,
+                        showSelectionBar: true
+                    }
+                };
+                $scope.bar = {
+                    value: 10,
+                    options: {
+                        floor: 5,
+                        ceil: 50,
+                        step: 1,
+                        showSelectionBar: true
+                    }
+                };
+
+                EventBus.on('rx.slider.input.valid', function (e) {
+                    if (e.sliderId == 'foo_id') {
+                        $scope.foo.value = e.data;
+                    } else if (e.sliderId == 'bar_id') {
+                        $scope.bar.value = e.data;
+                    }
+                });
+
+            }]);
+    </script>
+</body>
+
+</html>
