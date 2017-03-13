@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html ng-app="myApp">
-
 <head>
     <title>test</title>
     <link href="http://cdn.bootcss.com/bootstrap/3.1.1/css/bootstrap.css" rel="stylesheet">
@@ -66,75 +65,60 @@
 
 <body ng-controller="myCtrl">
     <div class="container">
-        <h3>angularjs-slider <strong>without</strong> custom slider input:</h3>
+        <h3>angularjs-slider <strong>without</strong> custom slider input</h3>
         <div class="custom-slider-wrapper">
             <rzslider class="custom-slider" rz-slider-model="demo.value" rz-slider-options="demo.options"></rzslider>
             <div class="custom-slider-control">
                 <input type="text" class="form-control" ng-model="demo.value">
             </div>
         </div>
+        <p>You can input almost any value even though you set the minLimit  and maxLimit.</p>
         <hr>
-        <h3>custom slider input with max and min limit:</h3>
+        <h3>custom slider input</h3>
         <div class="custom-slider-wrapper">
-            <label>foo:</label>
             <rzslider class="custom-slider" rz-slider-model="foo.value" rz-slider-options="foo.options"></rzslider>
             <div class="custom-slider-control">
-                <input type="text" class="form-control" ng-model="fooInput" rx-slider-input="foo.value" slider-id="foo_id" min="foo.options.floor"
-                    max="foo.options.ceil">
+                <input type="text" class="form-control" ng-model="fooInput" rx-slider-input="foo.value" min="foo.options.minLimit" max="foo.options.maxLimit" step="2" on-blur="resetSlider(value)">
             </div>
             <p>foo input model: {{fooInput}}</p>
+            <p>foo model: {{foo.value}}</p>
+            <p>You can input any value too but the directive will validate the input upon blur and invoke the onBlur callback, you can reset the slider value in the callback.</p>
         </div>
-        <div class="custom-slider-wrapper">
-            <label>bar:</label>
-            <rzslider class="custom-slider" rz-slider-model="bar.value" rz-slider-options="bar.options"></rzslider>
-            <div class="custom-slider-control">
-                <input type="text" class="form-control" ng-model="barInput" rx-slider-input="bar.value" slider-id="bar_id" min="bar.options.floor"
-                    max="bar.options.ceil">
-            </div>
-            <p>bar input model: {{barInput}}</p>
-        </div>
-        <p>Do not use the model bound to slider input to do anything but changing the slider value.</p>
-        <p>Not support decimal or negative number for now.</p>
     </div>
     <script>
         angular.module('myApp', ['rzModule', 'rx.sliderInput'])
-            .controller('myCtrl', ['$scope', 'EventBus', function ($scope, EventBus) {
+            .controller('myCtrl', ['$scope', function ($scope) {
+                // original slider without input directive
                 $scope.demo = {
                     value: 50,
                     options: {
                         floor: 0,
-                        ceil: 100,
-                        step: 1,
+                        ceil: 99,
+                        minLimit: 2,
+                        maxLimit: 98,
+                        step: 2,
                         showSelectionBar: true
                     }
                 };
+
+                // slider with custom input directive
                 $scope.foo = {
                     value: 50,
                     options: {
                         floor: 0,
-                        ceil: 100,
-                        step: 1,
-                        showSelectionBar: true
-                    }
-                };
-                $scope.bar = {
-                    value: 10,
-                    options: {
-                        floor: 5,
-                        ceil: 50,
-                        step: 1,
+                        ceil: 99,
+                        minLimit: 2,
+                        maxLimit: 98,
+                        step: 2,
                         showSelectionBar: true
                     }
                 };
 
-                EventBus.on('rx.slider.input.valid', function (e) {
-                    if (e.sliderId == 'foo_id') {
-                        $scope.foo.value = e.data;
-                    } else if (e.sliderId == 'bar_id') {
-                        $scope.bar.value = e.data;
-                    }
-                });
-
+                $scope.resetSlider = function(value) {
+                    console.log('reset to ', value);
+                    $scope.foo.value = value;
+                    $scope.test = value;
+                };
             }]);
     </script>
 </body>
