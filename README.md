@@ -8,7 +8,7 @@
 
 ## 例子
 
-[demo](http://xunqilong.com/angular-slider-input/index.html)
+[demo](http://xunqilong.com/angular-slider-input/)
 
 ## 使用
 
